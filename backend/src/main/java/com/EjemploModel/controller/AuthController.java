@@ -71,11 +71,11 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody SignupRequest signUpRequest) {
         if (usuarioRepository.existsByApodo(signUpRequest.getApodo())) {
-            return ResponseEntity.ok(Map.of("success", false, "message", "Error: apodo en uso"));
+            return ResponseEntity.ok(Map.of("success", false, "message", "Apodo en uso"));
         }
 
         if (usuarioRepository.existsByCorreo(signUpRequest.getCorreo())) {
-            return ResponseEntity.ok(Map.of("success", false, "message", "Error: correo en uso"));
+            return ResponseEntity.ok(Map.of("success", false, "message", "Correo en uso"));
         }
 
         Usuario user = new Usuario();

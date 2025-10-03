@@ -55,9 +55,6 @@ public class Usuario {
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     private List<Reporte> reportes;
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
-    private List<ComunidadUsuario> comunidadesUsuario;
-
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "usuario_roles",
@@ -65,8 +62,4 @@ public class Usuario {
         inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles = new HashSet<>();
-
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
-    private List<Publicacion> publicaciones;
 }

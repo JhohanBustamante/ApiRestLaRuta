@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 public class ReportePublicacionDto {
     private String apodoUsuario;
-    private Long usuarioId;
+    private Long usuario_id;
     private Long publicacionId;
     private String contenido;
     private String nombre;
@@ -13,11 +13,11 @@ public class ReportePublicacionDto {
     private String estado;
     private LocalDate fecha;
 
-    public ReportePublicacionDto(String apodoUsuario, Long usuarioId, Long publicacionId,
+    public ReportePublicacionDto(String apodoUsuario, Long usuario_id, Long publicacionId,
                                 String contenido, String nombre, String descripcion,
                                 String categoria, String estado, LocalDate fecha) {
         this.apodoUsuario = apodoUsuario;
-        this.usuarioId = usuarioId;
+        this.usuario_id = usuario_id;
         this.publicacionId = publicacionId;
         this.contenido = contenido;
         this.nombre = nombre;
@@ -31,8 +31,8 @@ public class ReportePublicacionDto {
     public String getApodoUsuario() { return apodoUsuario; }
     public void setApodoUsuario(String apodoUsuario) { this.apodoUsuario = apodoUsuario; }
 
-    public Long getUsuarioId() { return usuarioId; }
-    public void setUsuarioId(Long usuarioId) { this.usuarioId = usuarioId; }
+    public Long getUsuario_id() { return usuario_id; }
+    public void setUsuario_id(Long usuario_id) { this.usuario_id = usuario_id; }
 
     public Long getPublicacionId() { return publicacionId; }
     public void setPublicacionId(Long publicacionId) { this.publicacionId = publicacionId; }

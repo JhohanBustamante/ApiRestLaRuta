@@ -22,10 +22,5 @@ public class Publicacion {
     private String categoria;
     private String estado;
     private LocalDate fecha;
-
-    // 🔗 Relación: muchas publicaciones pertenecen a un usuario
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "usuario_id")
-    @JsonIgnore
-    private Usuario usuario;
+    private Long usuario_id;
 }
