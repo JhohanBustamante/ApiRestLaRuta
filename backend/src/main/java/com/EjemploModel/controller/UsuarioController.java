@@ -30,6 +30,11 @@ public class UsuarioController {
     return usuarioService.buscarPorId(id);
   }
 
+  @GetMapping("/usuarios/apodo/{apodo}")
+  public Usuario buscarPorApodo(@PathVariable String apodo) {
+    return usuarioService.buscarPorApodo(apodo);
+  }
+
   @PutMapping("/actualizar/{id}")
   public ResponseEntity<?> actualizarUsuario(
       @PathVariable Long id,
