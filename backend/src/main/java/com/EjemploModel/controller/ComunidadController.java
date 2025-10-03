@@ -1,6 +1,7 @@
 package com.EjemploModel.controller;
 
 import com.EjemploModel.dto.ComunidadDto;
+import com.EjemploModel.dto.FiltroComunidadDto;
 import com.EjemploModel.dto.ReporteDto;
 import com.EjemploModel.model.Comunidad;
 import com.EjemploModel.model.ComunidadUsuario;
@@ -9,9 +10,14 @@ import com.EjemploModel.repository.ComunidadUsuarioRepository;
 import com.EjemploModel.repository.UsuarioRepository;
 import com.EjemploModel.service.ComunidadService;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import com.EjemploModel.service.ReportePdfService;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 
 import java.util.List;
 import java.util.Map;
@@ -24,14 +30,17 @@ public class ComunidadController {
     private final ComunidadService comunidadService;
     private final UsuarioRepository usuarioRepository;
     private final ComunidadUsuarioRepository comunidadUsuarioRepository;
+    private final ReportePdfService reportePdfService;
 
     public ComunidadController(
             ComunidadService comunidadService,
-            UsuarioRepository usuarioRepository,
-            ComunidadUsuarioRepository comunidadUsuarioRepository) {
-        this.comunidadService = comunidadService;
-        this.usuarioRepository = usuarioRepository;
-        this.comunidadUsuarioRepository = comunidadUsuarioRepository;
+        UsuarioRepository usuarioRepository,
+        ComunidadUsuarioRepository comunidadUsuarioRepository,
+        ReportePdfService reportePdfService) {
+    this.comunidadService = comunidadService;
+    this.usuarioRepository = usuarioRepository;
+    this.comunidadUsuarioRepository = comunidadUsuarioRepository;
+    this.reportePdfService = reportePdfService;
     }
 
     @GetMapping("/api/comunidades")
@@ -86,4 +95,23 @@ public class ComunidadController {
         List<ReporteDto> comunidades = comunidadService.obtenerComunidadesPorApodo(apodo);
         return ResponseEntity.ok(comunidades);
     }
+
+    @PostMapping("/comunidad/filtrar")
+public ResponseEntity<List<ReporteDto>> filtrarComunidades(@RequestBody FiltroComunidadDto filtro) {
+    List<ReporteDto> comunidades = comunidadService.obtenerComunidadesFiltradas(filtro);
+    return ResponseEntity.ok(comunidades);
+}
+
+@PostMapping("/comunidad/filtrar/pdf")
+public ResponseEntity<byte[]> generarReportePdf(@RequestBody FiltroComunidadDto filtro) {
+    List<ReporteDto> reporte = comunidadService.obtenerComunidadesFiltradas(filtro);
+    byte[] pdf = reportePdfService.generarPdf(reporte);
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_PDF);
+    headers.setContentDispositionFormData("attachment", "reporte_comunidades.pdf");
+
+    return new ResponseEntity<>(pdf, headers, HttpStatus.OK);
+}
+
 }

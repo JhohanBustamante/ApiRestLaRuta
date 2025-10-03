@@ -4,6 +4,7 @@ import com.EjemploModel.model.Comunidad;
 import com.EjemploModel.model.ComunidadUsuario;
 import com.EjemploModel.model.Usuario;
 import com.EjemploModel.dto.ComunidadDto;
+import com.EjemploModel.dto.FiltroComunidadDto;
 import com.EjemploModel.dto.ReporteDto;
 import com.EjemploModel.repository.ComunidadRepository;
 import com.EjemploModel.repository.ComunidadUsuarioRepository;
@@ -29,6 +30,17 @@ public class ComunidadService {
         this.comunidadUsuarioRepository = comunidadUsuarioRepository;
         this.usuarioRepository = usuarioRepository;
     }
+
+    public List<ReporteDto> obtenerComunidadesFiltradas(FiltroComunidadDto filtro) {
+    return comunidadRepository.filtrarComunidades(
+        filtro.tipo(),
+        filtro.categoria(),
+        filtro.estado(),
+        filtro.fechaDesde(),
+        filtro.fechaHasta()
+    );
+}
+
 
     public List<ComunidadDto> listarTodos() {
     return comunidadRepository.findAll()
