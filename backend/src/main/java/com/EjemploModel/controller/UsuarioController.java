@@ -26,6 +26,7 @@ public class UsuarioController {
   public UsuarioController(UsuarioService usuarioService) {
     this.usuarioService = usuarioService;
   }
+
   @GetMapping("/usuarios/info")
   public List<UsuarioDto> listarUsuarios() {
     return usuarioService.listarTodos();
@@ -42,38 +43,38 @@ public class UsuarioController {
   }
 
   @PutMapping("/actualizar/{id}")
-public ResponseEntity<?> actualizarUsuario(
-    @PathVariable Long id,
-    @RequestBody Usuario datosNuevos) {
+  public ResponseEntity<?> actualizarUsuario(
+      @PathVariable Long id,
+      @RequestBody Usuario datosNuevos) {
 
-  Usuario existenteCorreo = usuarioService.buscarPorCorreo(datosNuevos.getCorreo());
-  if (existenteCorreo != null && !existenteCorreo.getId().equals(id)) {
-    return ResponseEntity
-        .badRequest()
-        .body(Map.of("estado", false, "mensaje", "Ya existe un usuario con ese correo"));
+    Usuario existenteCorreo = usuarioService.buscarPorCorreo(datosNuevos.getCorreo());
+    if (existenteCorreo != null && !existenteCorreo.getId().equals(id)) {
+      return ResponseEntity
+          .badRequest()
+          .body(Map.of("estado", false, "mensaje", "Ya existe un usuario con ese correo"));
+    }
+
+    Usuario existenteApodo = usuarioService.buscarPorApodo(datosNuevos.getApodo());
+    if (existenteApodo != null && !existenteApodo.getId().equals(id)) {
+      return ResponseEntity
+          .badRequest()
+          .body(Map.of("estado", false, "mensaje", "Ya existe un usuario con ese apodo"));
+    }
+
+    if (datosNuevos.getContrasena() != null && !datosNuevos.getContrasena().isBlank()) {
+      datosNuevos.setContrasena(encoder.encode(datosNuevos.getContrasena()));
+    }
+
+    Usuario actualizado = usuarioService.actualizarUsuario(id, datosNuevos);
+
+    if (actualizado == null) {
+      return ResponseEntity
+          .badRequest()
+          .body(Map.of("estado", false, "mensaje", "Usuario no encontrado"));
+    } else {
+      return ResponseEntity.ok(
+          Map.of("estado", true, "mensaje", "Usuario actualizado correctamente", "usuario", actualizado));
+    }
   }
-
-  Usuario existenteApodo = usuarioService.buscarPorApodo(datosNuevos.getApodo());
-  if (existenteApodo != null && !existenteApodo.getId().equals(id)) {
-    return ResponseEntity
-        .badRequest()
-        .body(Map.of("estado", false, "mensaje", "Ya existe un usuario con ese apodo"));
-  }
-
-  if (datosNuevos.getContrasena() != null && !datosNuevos.getContrasena().isBlank()) {
-    datosNuevos.setContrasena(encoder.encode(datosNuevos.getContrasena()));
-  }
-
-  Usuario actualizado = usuarioService.actualizarUsuario(id, datosNuevos);
-
-  if (actualizado == null) {
-    return ResponseEntity
-        .badRequest()
-        .body(Map.of("estado", false, "mensaje", "Usuario no encontrado"));
-  } else {
-    return ResponseEntity.ok(
-        Map.of("estado", true, "mensaje", "Usuario actualizado correctamente", "usuario", actualizado));
-  }
-}
 
 }
