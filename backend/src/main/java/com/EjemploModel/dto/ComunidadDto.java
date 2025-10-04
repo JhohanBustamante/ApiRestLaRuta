@@ -4,7 +4,6 @@ import java.time.LocalDate;
 
 import com.EjemploModel.model.Comunidad;
 
-
 public record ComunidadDto(
     Long id,
     String nombre,
@@ -13,5 +12,6 @@ public record ComunidadDto(
     Comunidad.Tipo tipo,
     String categoria,
     String estado,
-    LocalDate fecha
+    LocalDate fecha,
+    Long idCreador
 ) {}

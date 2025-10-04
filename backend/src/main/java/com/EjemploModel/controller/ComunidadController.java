@@ -53,6 +53,17 @@ public class ComunidadController {
         return comunidadService.buscarPorId(id);
     }
 
+    @GetMapping("/comunidad/buscar/{nombre}")
+    public ResponseEntity<ComunidadDto> obtenerPorNombre(@PathVariable String nombre) {
+        ComunidadDto comunidad = comunidadService.buscarPorNombre(nombre);
+
+        if (comunidad == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(comunidad);
+    }
+
     @PostMapping("/comunidad/crear")
     public ResponseEntity<?> crear(@RequestBody Comunidad comunidad) {
 
@@ -112,6 +123,12 @@ public ResponseEntity<byte[]> generarReportePdf(@RequestBody FiltroComunidadDto 
     headers.setContentDispositionFormData("attachment", "reporte_comunidades.pdf");
 
     return new ResponseEntity<>(pdf, headers, HttpStatus.OK);
+}
+
+@GetMapping("/comunidad/creador/{idCreador}")
+public ResponseEntity<List<ComunidadDto>> obtenerComunidadesPorCreador(@PathVariable Long idCreador) {
+    List<ComunidadDto> comunidades = comunidadService.obtenerPorIdCreador(idCreador);
+    return ResponseEntity.ok(comunidades);
 }
 
 }

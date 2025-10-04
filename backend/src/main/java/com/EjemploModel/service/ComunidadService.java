@@ -18,9 +18,23 @@ import java.util.List;
 @Service
 public class ComunidadService {
 
+    private ComunidadDto convertirADto(Comunidad c) {
+        return new ComunidadDto(
+                c.getId(),
+                c.getNombre(),
+                c.getDescripcion(),
+                c.getTematica(),
+                c.getTipo(),
+                c.getCategoria(),
+                c.getEstado(),
+                c.getFecha(),
+                c.getIdCreador());
+    }
+
     private final ComunidadRepository comunidadRepository;
     private final ComunidadUsuarioRepository comunidadUsuarioRepository;
     private final UsuarioRepository usuarioRepository;
+    
 
     public ComunidadService(
             ComunidadRepository comunidadRepository,
@@ -53,7 +67,8 @@ public class ComunidadService {
             c.getTipo(),
             c.getCategoria(),
             c.getEstado(),
-            c.getFecha()
+            c.getFecha(),
+            c.getIdCreador()
         ))
         .toList();
 }
@@ -62,7 +77,7 @@ public class ComunidadService {
         return comunidadRepository.save(comunidad);
     }
 
-    public Comunidad buscarPorNombre(String nombre) {
+    public ComunidadDto buscarPorNombre(String nombre) {
         return comunidadRepository.findByNombre(nombre).orElse(null);
     }
 
@@ -76,6 +91,13 @@ public class ComunidadService {
 
     public List<ReporteDto> obtenerComunidadesPorApodo(String apodo) {
         return comunidadRepository.findComunidadesPorApodo(apodo);
+    }
+
+    public List<ComunidadDto> obtenerPorIdCreador(Long idCreador) {
+    return comunidadRepository.findByIdCreador(idCreador)
+                .stream()
+                .map(this::convertirADto)
+                .toList();
     }
 
     public ComunidadUsuario vincularUsuarioAComunidad(Long usuarioId, Long comunidadId) {

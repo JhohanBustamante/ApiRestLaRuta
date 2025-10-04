@@ -10,10 +10,12 @@ import org.springframework.data.repository.query.Param;
 
 import com.EjemploModel.model.Comunidad;
 import com.EjemploModel.model.Reporte;
+import com.EjemploModel.dto.ComunidadDto;
 import com.EjemploModel.dto.ReporteDto;
 
 public interface ComunidadRepository extends JpaRepository<Comunidad, Long> {
-    Optional<Comunidad> findByNombre(String nombre);
+    
+    Optional<ComunidadDto> findByNombre(String nombre);
 
     @Query("""
                 SELECT new com.EjemploModel.dto.ReporteDto(
@@ -58,5 +60,7 @@ List<ReporteDto> filtrarComunidades(
     @Param("fechaDesde") LocalDate fechaDesde,
     @Param("fechaHasta") LocalDate fechaHasta
 );
+
+    List<Comunidad> findByIdCreador(Long idCreador);
 
 }
